@@ -6,6 +6,7 @@ local scenemanager = require "plugin.scenemanager"
 scenemanager.init({
 	scenes = {
 		["scForm"] = require "scForm",
+		["scScene1"] = require "scScene1",
 	},
 	debug = true,
 	-- testTheme = true,
@@ -15,9 +16,21 @@ scenemanager.init({
 scenemanager.create("scForm",{
 	testVar = "TestCreateVar",
 
-	effect = "showAlpha",
-	effectTimeMs = 500,
-	-- effectIntensity = 1,
+	-- effect = "shakeScale",
+	-- effectTimeMs = 250,
+	-- effectIntensity = 1.35,
+
+	onInit = function() print("onInit") end,
+	onCreate = function() print("onCreate") end,
+	onShow = function() print("onShow") end,
+})
+
+scenemanager.create("scScene1",{
+	testVar = "TestCreateVar",
+
+	-- effect = "shakeScale",
+	-- effectTimeMs = 250,
+	-- effectIntensity = 1.35,
 
 	onInit = function() print("onInit") end,
 	onCreate = function() print("onCreate") end,
@@ -40,5 +53,31 @@ scenemanager.create("scForm",{
 -- 	onDestroy = function() print("onDestroy") end,
 -- })
 
+-- scenemanager.hideAll({
+-- 	effect = "hideAlpha",
+-- 	effectTimeMs = 500,
+-- 	onHide = function() print( "onHideAll" ) end,
+-- })
+
 -- print( "scForm is show:", scenemanager.isShow("scForm") )
 -- print( "scForm is create:", scenemanager.isCreate("scForm") )
+
+-- timer.performWithDelay( 1000, function()
+-- 	scenemanager.hide("scForm",{
+-- 		testVar = "TestCreateVar",
+
+-- 		effect = "hideHeightDown",
+-- 		effectTimeMs = 500,
+-- 	})
+-- end )
+
+
+-- timer.performWithDelay( 1000, function()
+-- 	scenemanager.hideAll({
+-- 		effect = "hideAlpha",
+-- 		effectTimeMs = 500,
+-- 		onHide = function()
+-- 			print( "onHideAll" )
+-- 		end,
+-- 	})
+-- end )

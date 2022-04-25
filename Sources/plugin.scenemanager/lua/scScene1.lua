@@ -26,14 +26,9 @@ scene.create = function(p)
 	local custom = p.custom 	-- table: custom-parameters when scene create
 
 	-- example ui-object create
-	ui.uiRect = display.newRect(gr,content.centerX,content.centerY-content.height*.25,content.width*.25,content.height*.25)
+	ui.uiRect = display.newRect(gr,content.centerX,content.centerY,content.width*.25,content.height*.25)
 	-- example filling for light and dark mode
 	scene.setColor(ui.uiRect,{default="Orange",dark="Lime"})
-
-	-- example specUI-object create
-	specUI.specRect = display.newRect(gr,content.centerX,content.centerY+content.height*.25,content.width*.25,content.height*.25)
-	-- example default fill
-	scene.setColor(specUI.specRect,"CadetBlue")
 
 	-- timer example
 	-- timers.timerTest = timer.performWithDelay( 1000, function(e)
@@ -52,29 +47,6 @@ scene.show = function(p)
 	local specUI = p.specUI 	-- table: special show-table for ui objects(each object in the table will be deleted separately/removed when hide)
 	local timers = p.timers 	-- table: base show-table for timers(cancel when hide)
 	local custom = p.custom 	-- table: custom-parameters when scene create/show
-
-	-- timer example
-	timers.timerTest = timer.performWithDelay( 500, function(e)
-		-- example ui-object create
-		ui.uiCircle = display.newCircle(gr,content.centerX,content.centerY,content.height*.1)
-		-- example filling for light and dark mode
-		scene.setColor(ui.uiCircle,{default="HotPink",dark="Black"})
-
-		-- example create touch listener for ui-object
-		scene.setTouchListener(ui.uiCircle,{
-			onBegan = function(e)
-				-- print("onBegan")
-			end,
-			onMoved = function(e)
-				-- print("onMoved")
-			end,
-			onEnded = function(e)
-				-- print("onEnded")
-			end,
-			-- isMultyClick = false,
-			-- isReturn = false,
-		})
-	end, 1 )
 
 	-- print( "scene.show" )
 end

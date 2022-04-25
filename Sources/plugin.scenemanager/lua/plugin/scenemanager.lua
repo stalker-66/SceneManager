@@ -11,6 +11,7 @@ local string_len = string.len
 local string_sub = string.sub
 local math_round = math.round
 local math_random = math.random
+local math_abs = math.abs
 local _pairs = pairs
 
 -- private
@@ -23,6 +24,13 @@ local private = {
 	createList = {},
 	showList = {},
 }
+
+private.table_copy = function(tb)
+	if type(tb)~="table" then return tb end
+	local a = {}
+	for k, v in _pairs(tb) do a[private.table_copy(k)] = private.table_copy(v) end
+	return a
+end
 
 private.addCreateList = function(sceneName)
 	if not private.init then return false end
@@ -144,6 +152,14 @@ public.isCreate = function(sceneName)
 	return isExist
 end
 
+public.getCreateList = function()
+	return private.createList
+end
+
+public.getCreateLast = function()
+	return private.createList[#private.createList]
+end
+
 public.create = function(sceneName,params)
 	if not private.init then return false end
 
@@ -201,10 +217,11 @@ public.destroy = function(sceneName,params)
 
 		params.skipCheckCreate = true
 
-		params._onHide = params.onHide
+		local _onHide = params.onHide
 		params.onHide = function()
-			if params._onHide then
-				params._onHide()
+			if _onHide then
+				_onHide()
+				_onHide = nil
 			end
 
 			private.list[sceneName].defDestroy(
@@ -235,6 +252,14 @@ public.isShow = function(sceneName)
 		end
 	end
 	return isExist
+end
+
+public.getShowList = function()
+	return private.showList
+end
+
+public.getShowLast = function()
+	return private.showList[#private.showList]
 end
 
 public.show = function(sceneName,params)
@@ -314,8 +339,35 @@ public.hide = function(sceneName,params)
 	end
 end
 
+public.hideAll = function(params)
+	if not private.init then return false end
+
+	local params = params or {}
+
+	if params.onHide then
+		local _onHide = params.onHide
+		params.onHide = function()
+			if _onHide then
+				_onHide()
+				_onHide = nil
+			end
+		end
+	end
+
+	local showList = public.getShowList()
+	for i=1,#showList do
+		public.hide(showList[i],params)
+	end
+end
+
 public.new = function(constructor)
 	local constructor = constructor or {}
+	constructor.width = constructor.width or display.contentWidth
+	constructor.height = constructor.height or display.contentHeight
+	constructor.centerX = constructor.centerX or display.contentWidth*.5
+	constructor.centerY = constructor.centerY or display.contentHeight*.5
+	constructor.safeX = constructor.safeX or display.safeScreenOriginX
+	constructor.safeY = constructor.safeY or display.safeScreenOriginY
 	constructor.modeTheme = constructor.modeTheme or "auto"
 
 	local scene = {}
@@ -338,12 +390,12 @@ public.new = function(constructor)
 	end
 
 	scene.defContent = {
-		width = display.contentWidth,
-		height = display.contentHeight,
-		centerX = display.contentWidth*.5,
-		centerY = display.contentHeight*.5,
-		safeX = display.safeScreenOriginX,
-		safeY = display.safeScreenOriginY,
+		width = constructor.width,
+		height = constructor.height,
+		centerX = constructor.centerX,
+		centerY = constructor.centerY,
+		safeX = constructor.safeX,
+		safeY = constructor.safeY,
 		sceneTheme = public.getTheme(),
 		modeTheme = constructor.modeTheme,
 		startSec = 0,
@@ -352,33 +404,48 @@ public.new = function(constructor)
 		return true
 	end
 
+	scene.effectSceneList = {
+		["showAlpha"] = true,			["hideAlpha"] = true,
+		["showLeft"] = true,			["hideLeft"] = true,
+		["showRight"] = true,			["hideRight"] = true,
+		["showUp"] = true,				["hideUp"] = true,
+		["showDown"] = true,			["hideDown"] = true,
+		["showClock"] = true,			["hideClock"] = true,
+		["showCardUp"] = true,			["hideCardUp"] = true,
+		["showCardDown"] = true,		["hideCardDown"] = true,
+		["showZoom"] = true,			["hideZoom"] = true,
+		["showWidthLeft"] = true,		["hideWidthLeft"] = true,
+		["showWidthRight"] = true,		["hideWidthRight"] = true,
+		["showHeightUp"] = true,		["hideHeightUp"] = true,
+		["showHeightDown"] = true,		["hideHeightDown"] = true,
+		["shake"] = true,				["shakeScale"] = true,
+		["defShow"] = true,				["defHide"] = true,
+	}
 	scene.setAnimation = function(params)
 		local params = params or {}
 		params.effect = params.effect or "nil"
 		params.effectTimeMs = params.effectTimeMs or 0
 		params.effectIntensity = params.effectIntensity or 1
 
-		if params.effect=="nil" or params.effectTimeMs<=0 or params.effectIntensity<=0 then
-			if params.onComplete then
-				params.onComplete()
-			end
-		else
+		if scene.defSceneTransition then
+			transition.cancel(scene.defSceneTransition)
+			scene.defSceneTransition = nil
+		end
+		
+		if scene.grCreate then
+			scene.defShake = nil
+			scene.grCreate.alpha = 1
+			scene.grCreate.isVisible = true
+			scene.grCreate.x = 0
+			scene.grCreate.y = 0
+			scene.grCreate.rotation = 0
+			scene.grCreate.xScale = 1
+			scene.grCreate.yScale = 1
+			scene.grCreate.anchorChildren = false
+		end
+
+		if scene.effectSceneList[params.effect] then
 			if scene.grCreate then
-				if scene.defSceneTransition then
-					transition.cancel(scene.defSceneTransition)
-					scene.defSceneTransition = nil
-				end
-				
-				scene.defShake = nil
-
-				scene.grCreate.alpha = 1
-				scene.grCreate.x = 0
-				scene.grCreate.y = 0
-				scene.grCreate.rotation = 0
-				scene.grCreate.xScale = 1
-				scene.grCreate.yScale = 1
-				scene.grCreate.anchorChildren = false
-
 				if params.effect=="showAlpha" then
 					scene.grCreate.alpha = 0
 					scene.defSceneTransition = transition.to( scene.grCreate, { 
@@ -396,6 +463,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						alpha = 0,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -451,6 +519,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						x = -scene.grCreate.width,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -462,6 +531,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						x = scene.grCreate.width,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -473,6 +543,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						y = -scene.grCreate.height,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -484,6 +555,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						y = scene.grCreate.height,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -506,6 +578,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						rotation = -90,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -536,6 +609,7 @@ public.new = function(constructor)
 						y = -scene.grCreate.height,
 						rotation = -50,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -566,6 +640,7 @@ public.new = function(constructor)
 						y = scene.grCreate.height*1.2,
 						rotation = -50,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -606,6 +681,7 @@ public.new = function(constructor)
 						yScale = .001,
 						rotation = 360,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -628,6 +704,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						xScale = .001,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -654,6 +731,7 @@ public.new = function(constructor)
 						x = scene.grCreate.width,
 						xScale = .001,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -676,6 +754,7 @@ public.new = function(constructor)
 						time = params.effectTimeMs,
 						yScale = .001,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -702,6 +781,7 @@ public.new = function(constructor)
 						y = scene.grCreate.height,
 						yScale = .001,
 						onComplete = function()
+							scene.grCreate.isVisible = false
 							if params.onComplete then
 								params.onComplete()
 							end
@@ -794,11 +874,12 @@ public.new = function(constructor)
 						} )
 					end
 					scene.defShake()
-				else
-					if private.debug then
-						print( "SceneManager: Unidentified effect: \""..params.effect.."\"" )
+				elseif params.effect=="defShow" then
+					if params.onComplete then
+						params.onComplete()
 					end
-
+				elseif params.effect=="defHide" then
+					scene.grCreate.isVisible = false
 					if params.onComplete then
 						params.onComplete()
 					end
@@ -808,7 +889,187 @@ public.new = function(constructor)
 					print( "SceneManager: The scene has not been created." )
 				end
 			end
+		else
+			if private.debug then
+				print( "SceneManager: Unidentified Scene Effect: \""..params.effect.."\"" )
+			end
+
+			if params.onComplete then
+				params.onComplete()
+			end
 		end
+	end
+
+	scene.effectTouchList = {
+		["defaultBegan"] = true,		["defaultEnded"] = true,
+		["zoomInBegan"] = true,			["zoomInEnded"] = true,
+		["zoomOutBegan"] = true,		["zoomOutEnded"] = true,
+		["widthBegan"] = true,			["widthEnded"] = true,
+		["heightBegan"] = true,			["heightEnded"] = true,
+		["rotateLeftBegan"] = true,		["rotateLeftEnded"] = true,
+		["rotateRightBegan"] = true,	["rotateRightEnded"] = true,
+	}
+	scene.setTouchAnimation = function(params)
+		local params = params or {}
+		params.object = params.object
+		params.effect = params.effect or "nil"
+		params.effectIntensity = params.effectIntensity or 1
+
+		if scene.defTouchTransition then
+			transition.cancel(scene.defTouchTransition)
+			scene.defTouchTransition = nil
+		end
+		
+		if params.object then
+			if not params.object.defAlpha then
+				params.object.defAlpha = params.object.alpha
+			end
+			params.object.alpha = params.object.defAlpha
+
+			if not params.object.defXScale then
+				params.object.defXScale = params.object.xScale
+			end
+			params.object.xScale = params.object.defXScale
+
+			if not params.object.defYScale then
+				params.object.defYScale = params.object.yScale
+			end
+			params.object.yScale = params.object.defYScale
+
+			if not params.object.defRotation then
+				params.object.defRotation = params.object.rotation
+			end
+			params.object.rotation = params.object.defRotation
+		end
+
+		if scene.effectTouchList[params.effect] then
+			if params.object then
+				if params.effect=="defaultBegan" then
+					local intensity = params.effectIntensity*.5
+					params.object.alpha = params.object.defAlpha*intensity
+				elseif params.effect=="zoomInBegan" then
+					local intensity = params.effectIntensity*1.15
+					params.object.xScale = params.object.defXScale*intensity
+					params.object.yScale = params.object.defYScale*intensity
+				elseif params.effect=="zoomOutBegan" then
+					local intensity = params.effectIntensity*.85
+					params.object.xScale = params.object.defXScale*intensity
+					params.object.yScale = params.object.defYScale*intensity
+				elseif params.effect=="widthBegan" then
+					local intensity = params.effectIntensity*.85
+					params.object.xScale = params.object.defXScale*intensity
+				elseif params.effect=="heightBegan" then
+					local intensity = params.effectIntensity*.85
+					params.object.yScale = params.object.defYScale*intensity
+				elseif params.effect=="rotateLeft" then
+					local intensity = params.effectIntensity*30
+					params.object.rotation = params.object.defRotation-intensity
+				elseif params.effect=="rotateRight" then
+					local intensity = params.effectIntensity*30
+					params.object.rotation = params.object.defRotation+intensity
+				end
+			else
+				if private.debug then
+					print( "SceneManager: The scene-object has not been created." )
+				end
+			end
+		else
+			if private.debug then
+				print( "SceneManager: Unidentified Touch Effect: \""..params.effect.."\"" )
+			end
+		end
+	end
+	scene.setLockListener = function(obj,params)
+		if not obj then return false end
+		local obj = obj or {}
+		local params = params or {}
+		params.value = params.value
+		params.clickEffect = params.clickEffect or "default"
+		params.effectIntensity = params.effectIntensity or 1
+
+		if params.value then
+			obj.isLock = true
+			scene.setTouchAnimation({object=obj,effect=params.clickEffect.."Began",effectIntensity=params.effectIntensity})
+		else
+			obj.isLock = false
+			scene.setTouchAnimation({object=obj,effect=params.clickEffect.."Ended",effectIntensity=params.effectIntensity})
+		end
+	end
+	scene.setTouchListener = function(obj,params)
+		if not obj then return false end
+		local obj = obj or {}
+		local params = params or {}
+		params.clickEffect = params.clickEffect or "default"
+		params.effectIntensity = params.effectIntensity or 1
+		params.onInit = params.onInit or function(e) end
+		params.onBegan = params.onBegan or function(e) end
+		params.onMoved = params.onMoved or function(e) end
+		params.onEnded = params.onEnded or function(e) end
+		params.onLossFocusX = params.onLossFocusX
+		params.onLossFocusY = params.onLossFocusY
+		params.offsetLossX = math_round(scene.defContent.height*.05)
+		params.offsetLossY = math_round(scene.defContent.height*.05)
+		params.isReturn = params.isReturn~=false
+		params.isMultyClick = params.isMultyClick
+
+		obj.isLock = false
+		obj:addEventListener( "touch", function(e)
+			if obj.isLock then return true end
+			params.onInit(e)
+
+			if e.phase=="began" then
+				scene.setTouchAnimation({object=e.target,effect=params.clickEffect.."Began",effectIntensity=params.effectIntensity})
+
+				params.onBegan(e)
+
+				e.target.isFocus = true
+				display.getCurrentStage():setFocus(e.target)
+			end
+			if e.phase=="moved" and e.target.isFocus==true then
+				params.onMoved(e)
+
+				local defOffsetX = math_abs(e.x-e.xStart)
+				if defOffsetX>params.offsetLossX then
+					scene.setTouchAnimation({object=e.target,effect=params.clickEffect.."Ended",effectIntensity=params.effectIntensity})
+
+					e.target.isFocus = false
+					display.getCurrentStage():setFocus(nil)
+
+					if params.onLossFocusX then
+						params.onLossFocusX(e)
+					end
+				end
+				local defOffsetY = math_abs(e.x-e.xStart)
+				if defOffsetY>params.offsetLossY then
+					scene.setTouchAnimation({object=e.target,effect=params.clickEffect.."Ended",effectIntensity=params.effectIntensity})
+
+					e.target.isFocus = false
+					display.getCurrentStage():setFocus(nil)
+
+					if params.onLossFocusY then
+						params.onLossFocusY(e)
+					end
+				end
+			end
+			if (e.phase=="ended" or e.phase=="cancelled") and e.target.isFocus==true then
+				scene.setTouchAnimation({object=e.target,effect=params.clickEffect.."Ended",effectIntensity=params.effectIntensity})
+				if not params.isMultyClick then
+					scene.setLockListener(e.target,{
+						value = true,
+						clickEffect = params.clickEffect,
+						effectIntensity = params.effectIntensity,
+					})
+				end
+
+				params.onEnded(e)
+				
+				e.target.isFocus = false
+				display.getCurrentStage():setFocus(nil)
+			end
+			if params.isReturn then
+				return true
+			end
+		end )
 	end
 	scene.setColor = function(obj,color)
 		if not obj then return false end
@@ -911,6 +1172,10 @@ public.new = function(constructor)
 			transition.cancel(scene.defSceneTransition)
 			scene.defSceneTransition = nil
 		end
+		if scene.defTouchTransition then
+			transition.cancel(scene.defTouchTransition)
+			scene.defTouchTransition = nil
+		end
 
 		scene.defTimerCancel(scene.timersCreate)
 		scene.defRemove(scene.specUICreate)
@@ -930,7 +1195,7 @@ public.new = function(constructor)
 	scene.defShow = function(defParams,params)
 		local defParams = defParams or {}
 		local params = params or {}
-		params.effect = params.effect or "nil"
+		params.effect = params.effect or "defShow"
 		params.effectTimeMs = params.effectTimeMs or 0
 
 		scene.grShow = display.newGroup()
@@ -971,7 +1236,7 @@ public.new = function(constructor)
 	scene.defHide = function(defParams,params)
 		local defParams = defParams or {}
 		local params = params or {}
-		params.effect = params.effect or "nil"
+		params.effect = params.effect or "defHide"
 		params.effectTimeMs = params.effectTimeMs or 0
 
 		scene.hide(params)
