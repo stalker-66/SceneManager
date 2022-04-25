@@ -240,6 +240,26 @@ public.destroy = function(sceneName,params)
 	end
 end
 
+public.destroyAll = function(params)
+	if not private.init then return false end
+
+	local params = params or {}
+
+	local createList = public.getCreateList()
+	for i=1,#createList do
+		local p = {
+			effect = params.effect,
+			effectTimeMs = params.effectTimeMs,
+			effectIntensity = params.effectIntensity,
+		}
+		if i==#createList then
+			p.onHide = params.onHide
+			p.onDestroy = params.onDestroy
+		end
+		public.destroy(createList[i],p)
+	end
+end
+
 public.isShow = function(sceneName)
 	if not private.init then return false end
 
@@ -344,19 +364,17 @@ public.hideAll = function(params)
 
 	local params = params or {}
 
-	if params.onHide then
-		local _onHide = params.onHide
-		params.onHide = function()
-			if _onHide then
-				_onHide()
-				_onHide = nil
-			end
-		end
-	end
-
 	local showList = public.getShowList()
 	for i=1,#showList do
-		public.hide(showList[i],params)
+		local p = {
+			effect = params.effect,
+			effectTimeMs = params.effectTimeMs,
+			effectIntensity = params.effectIntensity,
+		}
+		if i==#showList then
+			p.onHide = params.onHide
+		end
+		public.hide(showList[i],p)
 	end
 end
 

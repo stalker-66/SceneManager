@@ -12,7 +12,7 @@ scene.init = function(p)
 	local content = p.content 	-- table: basic scene parameters
 	local custom = p.custom 	-- table: custom-parameters when scene create
 
-	-- print( "scene.init" )
+	print( "scene.init" )
 end
 
 -- Executed when the scene is created
@@ -40,7 +40,7 @@ scene.create = function(p)
 	-- 	print( "tic-tac", e.count )
 	-- end, 0 )
 
-	-- print( "scene.create" )
+	print( "scene.create" )
 end
 
 -- Executed after calling "create"
@@ -63,40 +63,40 @@ scene.show = function(p)
 		-- example create touch listener for ui-object
 		scene.setTouchListener(ui.uiCircle,{
 			onBegan = function(e)
-				-- print("onBegan")
+				print("onBegan")
 			end,
 			onMoved = function(e)
-				-- print("onMoved")
+				print("onMoved")
 			end,
 			onEnded = function(e)
-				-- print("onEnded")
+				print("onEnded")
 			end,
 			-- isMultyClick = false,
 			-- isReturn = false,
 		})
 	end, 1 )
 
-	-- print( "scene.show" )
+	print( "scene.show" )
 end
 
 -- Executed before calling "destroy"
 scene.hide = function(p)
-	-- print( "scene.hide" )
+	print( "scene.hide" )
 end
 
 -- Executed when the scene is destroy
 scene.destroy = function(p)
-	-- print( "scene.destroy" )
+	print( "scene.destroy" )
 end
 
 -- Executed when the application is suspend
 scene.suspend = function()
-	-- print( "scene.suspend" )
+	print( "scene.suspend" )
 end
 
 -- Executed when the application is resume
 scene.resume = function()
-	-- print( "scene.resume" )
+	print( "scene.resume" )
 end
 
 -- Events occur at the frames-per-second interval of the application
