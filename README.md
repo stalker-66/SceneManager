@@ -43,6 +43,7 @@ local scenemanager = require "plugin.scenemanager"
 > 	debug = false,
 > })
 > ```
+<br/>
 
 > Calling this function creates the specified scene in your app. Note that after the scene is created, the show phase is executed.
 > ```lua
@@ -53,21 +54,85 @@ local scenemanager = require "plugin.scenemanager"
 > 
 > The ***params*** table includes parameters for creating a scene via **scenemanager**. <br/>
 > * **effect** (optional) <br/>
-> `String`. Specifies the effect for the ***show*** or ***hide*** transition. See [...] for a list of valid options. If no effect is specified, the scene will appear or disappear instantaneously. Default is `defShow` to ***create***. Default is `defHide` to ***hide***. <br/>
+> `String`. Specifies the effect for the show transition. See [...] for a list of valid options. If no effect is specified, the scene will appear instantaneously. Default is `defShow`. <br/>
 > * **effectTimeMs** (optional) <br/>
 > `Number`. The time duration for the effect in milliseconds, if a valid effect has been specified. Default is `500` ms. <br/>
 > * **effectIntensity** (optional) <br/>
 > `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
 > * **onInit** (optional) <br/>
-> `Function`. Only for the ***create*** function. This function will be executed before the scene is created. Default is `nil`. <br/>
+> `Function`. This function will be executed before the scene is created. Default is `nil`. <br/>
 > * **onCreate** (optional) <br/>
-> `Function`. Only for the ***create*** function. This function will be executed after the scene has been created. Default is `nil`. <br/>
+> `Function`. This function will be executed after the scene has been created. Default is `nil`. <br/>
 > * **onShow** (optional) <br/>
-> `Function`. Only for the ***create*** or ***show*** function. This function will be executed after the scene is shown. Default is `nil`. <br/>
+> `Function`. This function will be executed after the scene is shown. Default is `nil`. <br/>
+<br/>
+
+> Calling this function shows the specified scene in your app. Note that the specified scene must be hidden.
+> ```lua
+> scenemanager.show(sceneName,params)
+> ```
+> * **sceneName** (required) <br/>
+> `String`. The scene name (or identifier) specified when **scenemanager** was initialized. <br/>
+> 
+> The ***params*** table includes parameters for showing a scene via **scenemanager**. <br/>
+> * **effect** (optional) <br/>
+> `String`. Specifies the effect for the show transition. See [...] for a list of valid options. If no effect is specified, the scene will appear instantaneously. Default is `defShow`. <br/>
+> * **effectTimeMs** (optional) <br/>
+> `Number`. The time duration for the effect in milliseconds, if a valid effect has been specified. Default is `500` ms. <br/>
+> * **effectIntensity** (optional) <br/>
+> `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
+> * **onShow** (optional) <br/>
+> `Function`. This function will be executed after the scene is shown. Default is `nil`. <br/>
+<br/>
+
+> Calling this function hides the specified scene in your app. Note that the specified scene must be shown.
+> ```lua
+> scenemanager.hide(sceneName,params)
+> ```
+> * **sceneName** (required) <br/>
+> `String`. The scene name (or identifier) specified when **scenemanager** was initialized. <br/>
+> 
+> The ***params*** table includes parameters for hiding a scene via **scenemanager**. <br/>
+> * **effect** (optional) <br/>
+> `String`. Specifies the effect for the hide transition. See [...] for a list of valid options. If no effect is specified, the scene will disappear instantaneously. Default is `defHide`. <br/>
+> * **effectTimeMs** (optional) <br/>
+> `Number`. The time duration for the effect in milliseconds, if a valid effect has been specified. Default is `500` ms. <br/>
+> * **effectIntensity** (optional) <br/>
+> `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
 > * **onHide** (optional) <br/>
-> `Function`. Only for the ***hide*** function. This function will be executed after the scene is hidden. Default is `nil`. <br/>
+> `Function`. This function will be executed after the scene is hidden. Default is `nil`. <br/>
+<br/>
+
+> Calling this function will destroy the specified scene in your app. Note that the specified scene must be created.
+> ```lua
+> scenemanager.destroy(sceneName,params)
+> ```
+> * **sceneName** (required) <br/>
+> `String`. The scene name (or identifier) specified when **scenemanager** was initialized. <br/>
+> 
+> The ***params*** table includes parameters for destroying a scene via **scenemanager**. <br/>
+> * **effect** (optional) <br/>
+> `String`. Specifies the effect for the hide transition. See [...] for a list of valid options. If no effect is specified, the scene will disappear instantaneously. Default is `defHide`. <br/>
+> * **effectTimeMs** (optional) <br/>
+> `Number`. The time duration for the effect in milliseconds, if a valid effect has been specified. Default is `500` ms. <br/>
+> * **effectIntensity** (optional) <br/>
+> `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
 > * **onDestroy** (optional) <br/>
-> `Function`. Only for the ***destroy*** function. This function will be executed after the scene is destroyed. Default is `nil`. <br/>
+> `Function`. This function will be executed after the scene is destroyed. Default is `nil`. <br/>
+<br/>
+
+> Calling this function hides all showed scenes in your app.
+> ```lua
+> scenemanager.hideAll(params)
+> ```
+<br/>
+
+> Calling this function destroy all created scenes in your app.
+> ```lua
+> scenemanager.destroyAll(params)
+> ```
+<br/>
+
 ## Usage
 ## Extras
 ## Example
