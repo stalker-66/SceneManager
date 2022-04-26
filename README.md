@@ -17,6 +17,13 @@ settings =
 local scenemanager = require "plugin.scenemanager"
 ```
 ## Functions
+> Initializes the **scenemanager** plugin. This call is required and must be executed before making other **scenemanager** calls.
+> ```lua
+> scenemanager.init(params)
+> ```
+> The ***params*** table includes parameters for **scenemanager** initialization. <br/>
+> * **debug** (optional) <br/>
+> `Boolean`. Includes additional debugging information for the plugin. Default is `false`. <br/>
 ## Usage
 ## Extras
 ## Example
