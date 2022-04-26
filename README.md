@@ -1,6 +1,6 @@
 # SceneManager
 ## Overview
-The "SceneManager" plugin for Solar2d allows developers to easily create, manage and transition  between individual scenes (screens).
+The "SceneManager" plugin for Solar2d allows you to easily create, manage and transition  between individual scenes (screens).
 ## Project Settings
 To use this plugin, add an entry into the plugins table of ***build.settings***.
 ```lua
