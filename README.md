@@ -125,12 +125,32 @@ local scenemanager = require "plugin.scenemanager"
 > ```lua
 > scenemanager.hideAll(params)
 > ```
+> The ***params*** table includes parameters for hide all scenes via **scenemanager**. <br/>
+> * **effect** (optional) <br/>
+> `String`. Specifies the effect for the hide transition. See [...] for a list of valid options. If no effect is specified, the scene will disappear instantaneously. Default is `defHide`. <br/>
+> * **effectTimeMs** (optional) <br/>
+> `Number`. The time duration for the effect in milliseconds, if a valid effect has been specified. Default is `500` ms. <br/>
+> * **effectIntensity** (optional) <br/>
+> `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
+> * **onHide** (optional) <br/>
+> `Function`. This function will be executed after the all scenes is hidden. Default is `nil`. <br/>
 <br/>
 
 > Calling this function destroy all created scenes in your app.
 > ```lua
 > scenemanager.destroyAll(params)
 > ```
+> The ***params*** table includes parameters for destroy all scenes via **scenemanager**. <br/>
+> * **effect** (optional) <br/>
+> `String`. Specifies the effect for the hide transition. See [...] for a list of valid options. If no effect is specified, the scene will disappear instantaneously. Default is `defHide`. <br/>
+> * **effectTimeMs** (optional) <br/>
+> `Number`. The time duration for the effect in milliseconds, if a valid effect has been specified. Default is `500` ms. <br/>
+> * **effectIntensity** (optional) <br/>
+> `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
+> * **onHide** (optional) <br/>
+> `Function`. This function will be executed after the all scenes is hidden. Default is `nil`. <br/>
+> * **onDestroy** (optional) <br/>
+> `Function`. This function will be executed after the all scenes is destroyed. Default is `nil`. <br/>
 <br/>
 
 ## Usage
