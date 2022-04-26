@@ -65,6 +65,13 @@ local scenemanager = require "plugin.scenemanager"
 > `Function`. This function will be executed after the scene has been created. Default is `nil`. <br/>
 > * **onShow** (optional) <br/>
 > `Function`. This function will be executed after the scene is shown. Default is `nil`. <br/>
+> > Others parameters will be sent to the custom argument for the phases: ***init***, ***create***, ***show***. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> local scenemanager = require "plugin.scenemanager"
+>
+> ```
 <br/>
 
 > Calling this function shows the specified scene in your app. Note that the specified scene must be hidden.
@@ -83,6 +90,13 @@ local scenemanager = require "plugin.scenemanager"
 > `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
 > * **onShow** (optional) <br/>
 > `Function`. This function will be executed after the scene is shown. Default is `nil`. <br/>
+> > Others parameters will be sent to the custom argument for the phase ***show***. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> local scenemanager = require "plugin.scenemanager"
+>
+> ```
 <br/>
 
 > Calling this function hides the specified scene in your app. Note that the specified scene must be shown.
@@ -101,6 +115,13 @@ local scenemanager = require "plugin.scenemanager"
 > `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
 > * **onHide** (optional) <br/>
 > `Function`. This function will be executed after the scene is hidden. Default is `nil`. <br/>
+> > Others parameters will be sent to the custom argument for the phase ***hide***. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> local scenemanager = require "plugin.scenemanager"
+>
+> ```
 <br/>
 
 > Calling this function will destroy the specified scene in your app. Note that the specified scene must be created.
@@ -117,8 +138,17 @@ local scenemanager = require "plugin.scenemanager"
 > `Number`. The time duration for the effect in milliseconds, if a valid effect has been specified. Default is `500` ms. <br/>
 > * **effectIntensity** (optional) <br/>
 > `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
+> * **onHide** (optional) <br/>
+> `Function`. This function will be executed after the scene is hidden. Default is `nil`. <br/>
 > * **onDestroy** (optional) <br/>
 > `Function`. This function will be executed after the scene is destroyed. Default is `nil`. <br/>
+> > Others parameters will be sent to the custom argument for the phases: ***hide***, ***destroy***. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> local scenemanager = require "plugin.scenemanager"
+>
+> ```
 <br/>
 
 > Calling this function hides all showed scenes in your app.
@@ -134,6 +164,12 @@ local scenemanager = require "plugin.scenemanager"
 > `Number`. The intensity of the scene effect, if a valid effect has been specified. Not all effects support this parameter. Default is `1`. <br/>
 > * **onHide** (optional) <br/>
 > `Function`. This function will be executed after the all scenes is hidden. Default is `nil`. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> local scenemanager = require "plugin.scenemanager"
+>
+> ```
 <br/>
 
 > Calling this function destroy all created scenes in your app.
@@ -151,6 +187,12 @@ local scenemanager = require "plugin.scenemanager"
 > `Function`. This function will be executed after the all scenes is hidden. Default is `nil`. <br/>
 > * **onDestroy** (optional) <br/>
 > `Function`. This function will be executed after the all scenes is destroyed. Default is `nil`. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> local scenemanager = require "plugin.scenemanager"
+>
+> ```
 <br/>
 
 ## Usage
