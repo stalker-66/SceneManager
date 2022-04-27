@@ -233,7 +233,7 @@ local scenemanager = require "plugin.scenemanager"
 > ```
 <br/>
 
-> Calling this function allows you to check if the scene is currently created. The function will return the boolean 'true' or 'false'.
+> Calling this function allows you to check if the scene is currently created. The function will return the boolean `true` or `false`.
 > ```lua
 > scenemanager.isCreate(sceneName)
 > ```
@@ -250,7 +250,7 @@ local scenemanager = require "plugin.scenemanager"
 > ```
 <br/>
 
-> Calling this function allows you to check if the scene is currently shown. The function will return the boolean 'true' or 'false'.
+> Calling this function allows you to check if the scene is currently shown. The function will return the boolean `true` or `false`.
 > ```lua
 > scenemanager.isShow(sceneName)
 > ```
@@ -264,6 +264,40 @@ local scenemanager = require "plugin.scenemanager"
 > else
 > 	print( "Scene not shown" )
 > end
+> ```
+<br/>
+
+> This function returns a table with created scenes in the format `key` = `value`, where `key` is the sequence number of the scene in the table, `value` is the scene name (or identifier) specified when **scenemanager** was initialized.
+> ```lua
+> scenemanager.getCreateList()
+> ```
+> 
+> `Example:` <br/>
+> ```lua
+> local createList = scenemanager.getCreateList()
+> ```
+> `Result:` <br/>
+> ```lua
+> createList = {
+> 	[1] = "First"
+> }
+> ```
+<br/>
+
+> This function returns a table with shown scenes in the format `key` = `value`, where `key` is the sequence number of the scene in the table, `value` is the scene name (or identifier) specified when **scenemanager** was initialized.
+> ```lua
+> scenemanager.getShowList()
+> ```
+> 
+> `Example:` <br/>
+> ```lua
+> local showList = scenemanager.getShowList()
+> ```
+> `Result:` <br/>
+> ```lua
+> showList = {
+> 	[1] = "First"
+> }
 > ```
 <br/>
 
