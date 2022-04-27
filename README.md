@@ -32,8 +32,6 @@ local scenemanager = require "plugin.scenemanager"
 > `Boolean`. Includes additional debugging information for the plugin. Default is `false`. <br/>
 > `Example:` <br/>
 > ```lua
-> local scenemanager = require "plugin.scenemanager"
-> 
 > scenemanager.init({
 > 	scenes = {
 > 		["First"] = require "scFirstScene",
@@ -69,8 +67,16 @@ local scenemanager = require "plugin.scenemanager"
 > 
 > `Example:` <br/>
 > ```lua
-> local scenemanager = require "plugin.scenemanager"
->
+> scenemanager.create("First",{
+> 	mySrt = "Hello World",
+> 
+> 	effect = "showAlpha",
+> 	effectTimeMs = 500,
+> 
+> 	onInit = function() print("onInit") end,
+> 	onCreate = function() print("onCreate") end,
+> 	onShow = function() print("onShow") end,
+> })
 > ```
 <br/>
 
@@ -94,8 +100,14 @@ local scenemanager = require "plugin.scenemanager"
 > 
 > `Example:` <br/>
 > ```lua
-> local scenemanager = require "plugin.scenemanager"
->
+> scenemanager.show("First",{
+> 	mySrt = "Hello World",
+> 
+> 	effect = "showAlpha",
+> 	effectTimeMs = 500,
+> 
+> 	onShow = function() print("onShow") end,
+> })
 > ```
 <br/>
 
@@ -119,8 +131,14 @@ local scenemanager = require "plugin.scenemanager"
 > 
 > `Example:` <br/>
 > ```lua
-> local scenemanager = require "plugin.scenemanager"
->
+> scenemanager.hide("First",{
+> 	mySrt = "Hello World",
+> 
+> 	effect = "hideAlpha",
+> 	effectTimeMs = 500,
+> 
+> 	onHide = function() print("onHide") end,
+> })
 > ```
 <br/>
 
@@ -146,8 +164,15 @@ local scenemanager = require "plugin.scenemanager"
 > 
 > `Example:` <br/>
 > ```lua
-> local scenemanager = require "plugin.scenemanager"
->
+> scenemanager.destroy("First",{
+> 	mySrt = "Hello World",
+> 
+> 	effect = "hideAlpha",
+> 	effectTimeMs = 500,
+> 
+> 	onHide = function() print("onHide") end,
+> 	onDestroy = function() print("onDestroy") end,
+> })
 > ```
 <br/>
 
@@ -167,8 +192,14 @@ local scenemanager = require "plugin.scenemanager"
 > 
 > `Example:` <br/>
 > ```lua
-> local scenemanager = require "plugin.scenemanager"
->
+> scenemanager.hideAll({
+> 	mySrt = "Hello World",
+> 
+> 	effect = "hideAlpha",
+> 	effectTimeMs = 500,
+> 
+> 	onHide = function() print("onHideAll") end,
+> })
 > ```
 <br/>
 
@@ -190,8 +221,15 @@ local scenemanager = require "plugin.scenemanager"
 > 
 > `Example:` <br/>
 > ```lua
-> local scenemanager = require "plugin.scenemanager"
->
+> scenemanager.destroyAll({
+> 	mySrt = "Hello World",
+> 
+> 	effect = "hideAlpha",
+> 	effectTimeMs = 500,
+> 
+> 	onHide = function() print("onHideAll") end,
+> 	onDestroy = function() print("onDestroyAll") end,
+> })
 > ```
 <br/>
 
