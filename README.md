@@ -233,6 +233,40 @@ local scenemanager = require "plugin.scenemanager"
 > ```
 <br/>
 
+> Calling this function allows you to check if the scene is currently created.
+> ```lua
+> scenemanager.isCreate(sceneName)
+> ```
+> * **sceneName** (required) <br/>
+> `String`. The scene name (or identifier) specified when **scenemanager** was initialized. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> if scenemanager.isCreate("First") then
+> 	print( "Scene is created" )
+> else
+> 	print( "Scene not created" )
+> end
+> ```
+<br/>
+
+> Calling this function allows you to check if the scene is currently shown.
+> ```lua
+> scenemanager.isShow(sceneName)
+> ```
+> * **sceneName** (required) <br/>
+> `String`. The scene name (or identifier) specified when **scenemanager** was initialized. <br/>
+> 
+> `Example:` <br/>
+> ```lua
+> if scenemanager.isShow("First") then
+> 	print( "Scene is shown" )
+> else
+> 	print( "Scene not shown" )
+> end
+> ```
+<br/>
+
 ## Usage
 ## Extras
 ## Example
