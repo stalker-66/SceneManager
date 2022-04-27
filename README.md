@@ -233,7 +233,7 @@ local scenemanager = require "plugin.scenemanager"
 > ```
 <br/>
 
-> Calling this function allows you to check if the scene is currently created.
+> Calling this function allows you to check if the scene is currently created. The function will return the boolean 'true' or 'false'.
 > ```lua
 > scenemanager.isCreate(sceneName)
 > ```
@@ -250,7 +250,7 @@ local scenemanager = require "plugin.scenemanager"
 > ```
 <br/>
 
-> Calling this function allows you to check if the scene is currently shown.
+> Calling this function allows you to check if the scene is currently shown. The function will return the boolean 'true' or 'false'.
 > ```lua
 > scenemanager.isShow(sceneName)
 > ```
@@ -267,6 +267,10 @@ local scenemanager = require "plugin.scenemanager"
 > ```
 <br/>
 
+> Plugin stop. After calling this function, initialization is required to work with the plugin.
+> ```lua
+> scenemanager.stop()
+> ```
 ## Usage
 ## Extras
 ## Example
